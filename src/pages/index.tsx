@@ -66,7 +66,7 @@ const Home: NextPage = () => {
       <Box h="100%" w="100%" my={4}>
         <Flex justifyContent="center">
           <Heading as="h3" my={4}>
-            My Car App
+           "CAR REG DAPP"
           </Heading>
         </Flex>
       </Box>
