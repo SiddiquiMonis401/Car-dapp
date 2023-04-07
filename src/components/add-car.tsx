@@ -17,7 +17,6 @@ type CarDetails = {
   name: string;
   model: string;
   year: number;
-  owner: string;
   price: number;
 }
 
@@ -36,11 +35,10 @@ export default function RegisterCar(props:Props){
     name: '',
     model: '',
     year: 2000,
-    owner: '',
     price: 0,
   }
 
-  const [carDetails, setCarDetails] = useState<CarDetails>(initCarDetails);
+  const [carDetails, setCarDetails] = useState<CarDetails>({...initCarDetails});
 
   const resetCarDetails = () => {
     setCarDetails(initCarDetails);
@@ -57,17 +55,17 @@ export default function RegisterCar(props:Props){
     const carContract:Contract = new ethers.Contract(addressContract, JSON.stringify(data.abi), signer)
 
 
-    const {name, model, year, owner, carId: id, price} = carDetails;
+    const {name, model, year, carId: id, price} = carDetails;
 
-    carContract.addCar(name, model, year, owner, id, price)
+    carContract.addCar(name, model, year, id, price)
       .then((tr: TransactionResponse) => {
         console.log(`TransactionResponse TX hash: ${tr.hash}`)
         tr.wait().then((receipt:TransactionReceipt)=>{console.log("transfer receipt",receipt)});
         setAddCarLoader(false);
         resetCarDetails();
         toast({
-          title: 'Car added successfully',
-          description: "Your car has been registered1",
+          title: 'Transaction Registered Success!',
+          description: "Transaction has been sent to chain - You can track the status of tx from wallet UI (Thanks)",
           status: 'success',
           duration: 3000,
           isClosable: true,
@@ -87,23 +85,22 @@ export default function RegisterCar(props:Props){
 
   }
 
+
   const handleChange = (value:string | number, key: string) => setCarDetails((prev: CarDetails): CarDetails  => ({...prev, [key]: value }))
 
   return (
     <form autoComplete="off" onSubmit={addCar}>
     <FormControl>
       <FormLabel htmlFor='name'>Car Id: </FormLabel>
-      <Input id="carId" type="text" required  onChange={(e) => handleChange(parseInt(e.target.value), e.target.id)} my={3}/>
+      <Input id="carId" type="text" value={carDetails?.carId || ''} required  onChange={(e) => handleChange(parseInt(e.target.value), e.target.id)} my={3}/>
       <FormLabel htmlFor='name'>Name: </FormLabel>
-      <Input id="name" type="text" required  onChange={(e) => handleChange(e.target.value, e.target.id)} my={3}/>
+      <Input id="name" type="text" required value={carDetails?.name}  onChange={(e) => handleChange(e.target.value, e.target.id)} my={3}/>
       <FormLabel htmlFor='model'>Model: </FormLabel>
-      <Input id="model" type="text" required  onChange={(e) => handleChange(e.target.value, e.target.id)} my={3}/>
+      <Input id="model" type="text" value={carDetails?.model} required  onChange={(e) => handleChange(e.target.value, e.target.id)} my={3}/>
       <FormLabel htmlFor='name'>Year: </FormLabel>
-      <Input id="year" type="text" required  onChange={(e) => handleChange(parseInt(e.target.value), e.target.id)} my={3}/>
-      <FormLabel htmlFor='name'>Owner: </FormLabel>
-      <Input id="owner" type="text" required  onChange={(e) => handleChange(e.target.value, e.target.id)} my={3}/>
-      <FormLabel htmlFor='name'>Price: </FormLabel>
-      <Input id="price" type="text" required  onChange={(e) => handleChange(e.target.value, e.target.id)} my={3}/>
+      <Input id="year" type="text" required value={carDetails?.year}  onChange={(e) => handleChange(parseInt(e.target.value), e.target.id)} my={3}/>
+      <FormLabel htmlFor='name'>Price (Wei): </FormLabel>
+      <Input id="price" value={carDetails?.price} type="text" required  onChange={(e) => handleChange(e.target.value, e.target.id)} my={3}/>
       <Button type="submit"  isDisabled={!currentAccount || addCarLoader}>Add Car</Button>
     </FormControl>
     </form>

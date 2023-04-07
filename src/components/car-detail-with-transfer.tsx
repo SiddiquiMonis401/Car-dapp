@@ -99,19 +99,17 @@ export default function ShowCarById(props: Props) {
               <b>Car Owner:</b> {car?.owner}
             </Text>
             <Text fontSize="sm">
-              <b>Car Price:</b> {car?.price.toString()}
+              <b>Car Price (Wei):</b> {car?.price.toString()} 
             </Text>
-            <Divider />
-            <Divider />
-            <Divider />
-            <Divider />
-            <Spacer />
+            <Box height="20px" />
             <TransferCar
               carPrice={car?.price}
               addressContract={addressContract}
               currentAccount={currentAccount!}
+              owner={car?.owner}
               carId={carId}
             />
+            <Box height="20px" />
           </Flex>
         </Box>
       )}

@@ -10,7 +10,7 @@ import RegisterCar from '@/components/add-car'
 
 declare let window: any
 
-const contractAddress = '0x498C11c5B91bAdE275eDbfD9995215B1e42120Ad';
+const contractAddress = '0x11d995aa482E4E207Fd7358A95985f5308Dac2ce';
 
 const Home: NextPage = () => {
   const [balance, setBalance] = useState<string | undefined>()
